@@ -30,7 +30,7 @@ app.get('/api/students', async (req, res, next) => {
     try {
         const allStudents = await pool.query('SELECT * FROM students');
         res.status(200).json({
-            message: 'get all students success',
+            message: 'All Students successfully retrieved',
             students: allStudents.rows
         });
     } catch (err) {
@@ -42,10 +42,16 @@ app.get('/api/students/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         const student = await pool.query('SELECT * FROM students WHERE id = $1', [id]);
-        res.json({
-            message: 'Student retrieved successfully',
-            student: student.rows[0]
-        });
+        if (student.rows.length === 0) {
+            res.status(404).json({
+                message: 'Student not found'
+            });
+        } else {
+            res.json({
+                message: 'Student retrieved successfully',
+                student: student.rows[0]
+            });
+        }
     } catch (err) {
         next(err);
     }

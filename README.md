@@ -71,14 +71,16 @@ Response body:
 
 #### GET `/api/students/:id`
 
+Response body:
+
 ```json
 {
   "message": "Student retrieved successfully",
   "student": {
     "id": 1,
-    "name": "John Doe",
+    "name": "Adam Wisnu Pradana",
     "age": 22,
-    "address": "123 Main St, Anytown, USA",
+    "address": "Bandung, Indonesia",
     "is_active": true
   }
 }
@@ -113,6 +115,8 @@ Response body:
 ```
 
 #### DELETE `/api/students/:id`
+
+Response body:
 
 ```json
 {
