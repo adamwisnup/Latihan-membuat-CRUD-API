@@ -1,14 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const pg = require('pg');
 
 const pool = new pg.Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'latihan-api',
-    password: 'postgres',
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
 app.use(express.json());
