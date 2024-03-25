@@ -104,9 +104,9 @@ Response body:
   "message": "Student updated successfully",
   "student": {
     "id": 3,
-    "name": "Michel Johnson",
-    "age": 21,
-    "address": "789 Oak Dr, Anytown, USA",
+    "name": "Adam Wisnu Pradana",
+    "age": 22,
+    "address": "Bandung, Indonesia",
     "is_active": true
   }
 }
