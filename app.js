@@ -16,6 +16,9 @@ app.use(express.json());
 
 app.post('/api/students', async (req, res, next) => {
     const { name, age, address, is_active } = req.body;
+    if (!name || !age || !address || is_active === undefined) {
+        return res.status(400).json({ message: 'Bad Request' });
+    }
     try {
         const newStudent = await pool.query('INSERT INTO students (name, age, address, is_active) VALUES ($1, $2, $3, $4) RETURNING *', [name, age, address, is_active]);
         res.status(201).json({
@@ -48,7 +51,7 @@ app.get('/api/students/:id', async (req, res, next) => {
                 message: 'Student not found'
             });
         } else {
-            res.json({
+            res.status(200).json({
                 message: 'Student retrieved successfully',
                 student: student.rows[0]
             });
@@ -61,9 +64,12 @@ app.get('/api/students/:id', async (req, res, next) => {
 app.put('/api/students/:id', async (req, res, next) => {
     const { id } = req.params;
     const { name, age, address, is_active } = req.body;
+    if (!name || !age || !address || is_active === undefined) {
+        return res.status(400).json({ message: 'Bad Request' });
+    }
     try {
         const updateStudent = await pool.query('UPDATE students SET name = $1, age = $2, address = $3, is_active = $4 WHERE id = $5 RETURNING *', [name, age, address, is_active, id]);
-        res.json({
+        res.status(200).json({
             message: 'Student updated successfully',
             student: updateStudent.rows[0]
         });
@@ -76,7 +82,7 @@ app.delete('/api/students/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         await pool.query('DELETE FROM students WHERE id = $1', [id]);
-        res.json({ message: 'Student deleted successfully' });
+        res.status(200).json({ message: 'Student deleted successfully' });
     } catch (err) {
         next(err);
     }
