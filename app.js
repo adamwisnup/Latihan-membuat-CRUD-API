@@ -32,7 +32,18 @@ app.post('/api/students', async (req, res, next) => {
 
 app.get('/api/students', async (req, res, next) => {
     try {
-        const allStudents = await pool.query('SELECT * FROM students');
+        let allStudents;
+
+        const keywords = req.query.keywords;
+
+        if (keywords) {
+            const searchQuery = 'SELECT * FROM students WHERE name LIKE $1 OR address LIKE $2';
+            const searchValues = [`%${keywords}%`, `%${keywords}%`];
+            allStudents = await pool.query(searchQuery, searchValues);
+        } else {
+            allStudents = await pool.query('SELECT * FROM students');
+        }
+        
         res.status(200).json({
             message: 'All Students successfully retrieved',
             students: allStudents.rows
@@ -41,6 +52,7 @@ app.get('/api/students', async (req, res, next) => {
         next(err);
     }
 });
+
 
 app.get('/api/students/:id', async (req, res, next) => {
     const { id } = req.params;
