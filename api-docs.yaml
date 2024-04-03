@@ -1,0 +1,273 @@
+openapi: 3.0.1
+info:
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  title: Instagram API
+  description: api students
+  version: 1.0.0
+  contact:
+    email: wisnuadam21@gmail.com
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /students:
+    post:
+      operationId: registerUser
+      security:
+        - {}
+      summary: register new user
+      description: mendaftarkan user baru kedalam sistem..
+      requestBody:
+        $ref: "#/components/requestBodies/Register"
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                      message:
+                        type: string
+                        example: success
+                  - $ref: "#/components/schemas/Student"
+                  - type: object
+                    properties:
+                      password:
+                        type: string
+                        example: guntur123
+        400:
+          description: undefined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: bad request
+    get:
+      operationId: getAllUser
+      security:
+        - {}
+      summary: get all user
+      parameters:
+        - schema:
+            type: string
+          name: search
+          in: query
+      description: mendapatkan semua user yang terdaftar dalam sistem
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Student"
+        400:
+          description: undefined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: bad request
+  /students/{id}:
+    get:
+      operationId: getUserById
+      security:
+        - {}
+      summary: get user by id
+      description: mendapatkan user berdasarkan id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 7
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    $ref: "#/components/schemas/Student"
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Not found
+    put:
+      operationId: updateUser
+      security:
+        - {}
+      summary: update user
+      description: mengupdate user berdasarkan id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 7
+      requestBody:
+        $ref: "#/components/requestBodies/Register"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    $ref: "#/components/schemas/Student"
+        400:
+          description: undefined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: bad request
+    delete:
+      operationId: deleteUser
+      security:
+        - {}
+      summary: delete user
+      description: menghapus user berdasarkan id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 7
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    example: null
+        400:
+          description: undefined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: bad request
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Student:
+      title: Student
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 7
+        name:
+          type: string
+          example: adam
+        age:
+          type: integer
+          example: 21
+        address:
+          type: string
+          example: Bandung, Indonesia
+        is_active:
+          type: boolean
+          example: true
+  requestBodies:
+    Register:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: adam
+              age:
+                type: integer
+                example: 21
+              address:
+                type: string
+                example: Bandung, Indonesia
+              is_active:
+                type: boolean
+                example: true
